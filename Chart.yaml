@@ -1,0 +1,10 @@
+apiVersion: v2
+name: metutors
+description: MeTutors Helm Chart By Eslam Shapsough
+type: application
+version: "1.0"
+appVersion: "1.0"
+maintainers:
+  - name: Eslam Shapsough
+    email: eslam@eshapsough.com
+    url: eshapsough.com

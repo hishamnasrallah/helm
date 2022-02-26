@@ -1,0 +1,32 @@
+{{ if eq .Values.env "staging" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.gateway.service_name }}
+spec:
+  type: NodePort
+  sessionAffinity: None
+  selector:
+    app: {{ .Values.gateway.service_name }}
+  ports:
+    - port: 80
+      nodePort: 30080
+      protocol: TCP
+      name: {{ .Values.gateway.service_name }}
+{{ end }}
+{{ if eq .Values.env "production" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.gateway.service_name }}
+spec:
+  type: NodePort
+  sessionAffinity: None
+  selector:
+    app: {{ .Values.gateway.service_name }}
+  ports:
+    - port: 80
+      nodePort: 31080
+      protocol: TCP
+      name: {{ .Values.gateway.service_name }}
+{{ end }}

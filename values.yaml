@@ -1,0 +1,87 @@
+# By Eslam Shapsough
+###############################
+###############################
+# Env Selector { staging | production }
+env: "staging"
+###############################
+###############################
+# Logging Config Values
+###############################
+###############################
+logger:
+  elasticsearch_host: "http://10.10.0.11:32750"
+  basic_auth: false
+  username: "logger"
+  password: "swingSITmena#123"
+###############################
+###############################
+# Nginx Router Values
+###############################
+###############################
+gateway:
+  replicas: 1
+  service_name: "cluster-gateway"
+  image:
+    repository: shapsough/utils
+    tag: "nginx-router-1.0"
+    pullPolicy: IfNotPresent
+# Memory And CPU Requests and Limits.
+  resources:
+    limits:
+      cpu: 0.5
+      memory: 512Mi
+    requests:
+      cpu: 0.5
+      memory: 512Mi
+###############################
+###############################
+# FrontEnd Values
+###############################
+###############################
+frontend:
+  replicas: 1
+  service_name: "frontend-service"
+  image:
+    repository:  metutors/metutors
+    tag: "dev-fe-1.0.1"
+    pullPolicy: Always
+# Memory And CPU Requests and Limits.
+  resources:
+    limits:
+      cpu: 0.5
+      memory: 512Mi
+    requests:
+      cpu: 0.5
+      memory: 512Mi
+###############################
+###############################
+# BackEnd Values
+###############################
+###############################
+backend:
+  replicas: 1
+  service_name: "backend-service"
+  image:
+    repository:  shapsough/metutors
+    tag: "backend-1.1"
+    pullPolicy: Always
+# Memory And CPU Requests and Limits.
+  resources:
+    limits:
+      cpu: 2
+      memory: 4096Mi
+    requests:
+      cpu: 2
+      memory: 4096Mi
+###############################
+###############################
+# Celery Beat Values
+###############################
+###############################
+
+###############################
+###############################
+# Celery Worker Values
+
+###############################
+###############################

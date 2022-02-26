@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.gateway.service_name }}
+  labels:
+    app: {{ .Values.gateway.service_name }}
+spec:
+  replicas: {{ .Values.gateway.replicas }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ .Values.gateway.service_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.gateway.service_name }}
+    spec:
+      restartPolicy: Always
+      initContainers:
+      - name: frontend-probe
+        image: shapsough/utils:busybox
+        command: ["sh","-c","until nc -vz {{ .Values.frontend.service_name }}:80; do echo 'Waiting for FrontEnd'; sleep 2; done;"]
+#      - name: backend-probe
+#        image: shapsough/utils:busybox
+#        command: ["sh","-c","until nc -vz {{ .Values.backend.service_name }}:80; do echo 'Waiting for BackEnd'; sleep 2; done;"]
+      containers:
+      - name: {{ .Values.gateway.service_name }}-logger
+        image: shapsough/utils:filebeat-7.14.2
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 0.25
+            memory: 128Mi
+          requests:
+            cpu: 0.25
+            memory: 128Mi
+        volumeMounts:
+            - name: gateway-logger-conf
+              mountPath: /filebeat/filebeat.yml
+              subPath: filebeat.yml
+            - name: logs-share
+              mountPath: /var/log/nginx
+      - name: {{ .Values.gateway.service_name }}
+        image: {{ .Values.gateway.image.repository }}:{{ .Values.gateway.image.tag }}
+        imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
+        resources:
+          limits:
+            cpu: {{ .Values.gateway.resources.limits.cpu }}
+            memory: {{ .Values.gateway.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.gateway.resources.requests.cpu }}
+            memory: {{ .Values.gateway.resources.requests.memory }}
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 3
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 3
+        volumeMounts:
+            - name: {{ .Values.env }}-gateway-nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: {{ .Values.env }}-gateway-nginx-site
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+            - name: logs-share
+              mountPath: /var/log/nginx
+      volumes:
+        - name: {{ .Values.env }}-gateway-nginx-conf
+          configMap:
+            name: {{ .Values.env }}-gateway-nginx-conf
+        - name: {{ .Values.env }}-gateway-nginx-site
+          configMap:
+            name: {{ .Values.env }}-gateway-nginx-site
+        - name: logs-share
+          emptyDir: {}
+        - name: gateway-logger-conf
+          configMap:
+            name: gateway-logger-conf
+      imagePullSecrets:
+      - name: "utils-docker"
