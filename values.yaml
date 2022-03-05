@@ -62,17 +62,17 @@ backend:
   replicas: 1
   service_name: "backend-service"
   image:
-    repository:  shapsough/metutors
-    tag: "backend-1.1"
+    repository:  metutors/metutors
+    tag: "dev-be-1.0.0"
     pullPolicy: Always
 # Memory And CPU Requests and Limits.
   resources:
     limits:
-      cpu: 2
-      memory: 4096Mi
+      cpu: 1
+      memory: 2048Mi
     requests:
-      cpu: 2
-      memory: 4096Mi
+      cpu: 1
+      memory: 2048Mi
 ###############################
 ###############################
 # Celery Beat Values

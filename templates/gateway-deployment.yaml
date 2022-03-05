@@ -20,9 +20,9 @@ spec:
       - name: frontend-probe
         image: shapsough/utils:busybox
         command: ["sh","-c","until nc -vz {{ .Values.frontend.service_name }}:80; do echo 'Waiting for FrontEnd'; sleep 2; done;"]
-#      - name: backend-probe
-#        image: shapsough/utils:busybox
-#        command: ["sh","-c","until nc -vz {{ .Values.backend.service_name }}:80; do echo 'Waiting for BackEnd'; sleep 2; done;"]
+      - name: backend-probe
+        image: shapsough/utils:busybox
+        command: ["sh","-c","until nc -vz {{ .Values.backend.service_name }}:80; do echo 'Waiting for BackEnd'; sleep 2; done;"]
       containers:
       - name: {{ .Values.gateway.service_name }}-logger
         image: shapsough/utils:filebeat-7.14.2

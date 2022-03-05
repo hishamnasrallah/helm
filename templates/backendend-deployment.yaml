@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.frontend.service_name }}
+  name: {{ .Values.backend.service_name }}
   labels:
-    app: {{ .Values.frontend.service_name }}
+    app: {{ .Values.backend.service_name }}
 spec:
-  replicas: {{ .Values.frontend.replicas }}
+  replicas: {{ .Values.backend.replicas }}
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: {{ .Values.frontend.service_name }}
+      app: {{ .Values.backend.service_name }}
   template:
     metadata:
       labels:
-        app: {{ .Values.frontend.service_name }}
+        app: {{ .Values.backend.service_name }}
     spec:
       restartPolicy: Always
       containers:
-      - name: {{ .Values.frontend.service_name }}
-        image: {{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}
+      - name: {{ .Values.backend.service_name }}
+        image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
         imagePullPolicy: Always
         resources:
           limits:
-            cpu: {{ .Values.frontend.resources.limits.cpu }}
-            memory: {{ .Values.frontend.resources.limits.memory }}
+            cpu: {{ .Values.backend.resources.limits.cpu }}
+            memory: {{ .Values.backend.resources.limits.memory }}
           requests:
-            cpu: {{ .Values.frontend.resources.requests.cpu }}
-            memory: {{ .Values.frontend.resources.requests.memory }}
+            cpu: {{ .Values.backend.resources.requests.cpu }}
+            memory: {{ .Values.backend.resources.requests.memory }}
         ports:
         - containerPort: 80
         readinessProbe:
