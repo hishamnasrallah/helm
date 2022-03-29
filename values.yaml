@@ -66,7 +66,7 @@ backend:
     tag: "dev-be-1.0.0"
     pullPolicy: Always
   command:
-    run: 'composer update && php artisan optimize'
+    run: 'composer install && composer update && php artisan optimize'
 # Memory And CPU Requests and Limits.
   resources:
     limits:
