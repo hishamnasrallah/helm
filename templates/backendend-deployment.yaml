@@ -19,7 +19,7 @@ spec:
       initContainers:
       - name: perms-fixer
         image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
-        command: ["sh","-c","chown -R www-data:www-data /var/www/html/public/uploads && chown -R www-data:www-data /var/www/html/storage"]
+        command: ["sh","-c","chown -R www-data:www-data /var/www/html/public/uploads"]
         volumeMounts:
           - name: uploads-volume
             mountPath: /var/www/html/public/uploads
