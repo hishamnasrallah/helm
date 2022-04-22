@@ -1,11 +1,11 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: images-volume
+  name: uploads-volume
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: azurefile
+  storageClassName: gluster-heketi-external
   resources:
     requests:
-      storage: 100Gi
+      storage: {{ .Values.backend.uploads_storage }}
