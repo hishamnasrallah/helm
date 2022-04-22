@@ -16,6 +16,13 @@ spec:
         app: {{ .Values.backend.service_name }}
     spec:
       restartPolicy: Always
+      initContainers:
+      - name: perms-fixer
+        image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+        command: ["sh","-c","chown -R www-data:www-data /var/www/html/public/uploads"]
+        volumeMounts:
+          - name: uploads-volume
+            mountPath: /var/www/html/public/uploads
       containers:
       - name: {{ .Values.backend.service_name }}
         image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
