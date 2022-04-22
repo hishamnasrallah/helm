@@ -20,6 +20,9 @@ spec:
       - name: {{ .Values.backend.service_name }}
         image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
         imagePullPolicy: Always
+        volumeMounts:
+          - name: uploads-volume
+            mountPath: /var/www/html/public/uploads
         resources:
           limits:
             cpu: {{ .Values.backend.resources.limits.cpu }}
@@ -45,5 +48,9 @@ spec:
           timeoutSeconds: 1
           successThreshold: 1
           failureThreshold: 3
+      volumes:
+        - name: uploads-volume
+          persistentVolumeClaim:
+            claimName: uploads-volume
       imagePullSecrets:
       - name: "utils-docker"
