@@ -15,6 +15,7 @@ data:
         worker_connections  1024;
     }
     http {
+        client_max_body_size 100M;
         include       /etc/nginx/mime.types;
         default_type  application/octet-stream;
         access_log  /var/log/nginx/nginx.log;
