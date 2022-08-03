@@ -124,9 +124,9 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: prod-gateway-nginx-conf
+  name: production-gateway-nginx-conf
   labels:
-    name: prod-gateway-nginx-conf
+    name: production-gateway-nginx-conf
 data:
   nginx.conf: |-
     user  nginx;
@@ -152,13 +152,13 @@ data:
     }
 {{ end }}
 ---
-{{ if eq .Values.env "staging" }}
+{{ if eq .Values.env "production" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: prod-gateway-nginx-site
+  name: production-gateway-nginx-site
   labels:
-    name: prod-gateway-nginx-site
+    name: production-gateway-nginx-site
 data:
   default.conf: |-
     server {
