@@ -119,3 +119,95 @@ data:
     setup.template.pattern: "{{ .Values.gateway.service_name }}-*"
     setup.ilm.enabled: false
 {{ end }}
+---
+{{ if eq .Values.env "production" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prod-gateway-nginx-conf
+  labels:
+    name: prod-gateway-nginx-conf
+data:
+  nginx.conf: |-
+    user  nginx;
+    worker_processes  auto;
+    error_log  /var/log/nginx/nginx.log notice;
+    pid        /var/run/nginx.pid;
+    events {
+        worker_connections  1024;
+    }
+    http {
+        client_max_body_size 100M;
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+        access_log  /var/log/nginx/nginx.log;
+        sendfile        on;
+        keepalive_timeout  90;
+        include /etc/nginx/conf.d/*.conf;
+        gzip on;
+        gzip_vary on;
+        gzip_min_length 512;
+        gzip_types text/plain text/css text/xml application/javascript application/x-javascript text/javascript application/xml;
+        gzip_disable "MSIE [1-6]\.";
+    }
+{{ end }}
+---
+{{ if eq .Values.env "staging" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prod-gateway-nginx-site
+  labels:
+    name: prod-gateway-nginx-site
+data:
+  default.conf: |-
+    server {
+    # Do Not Chage From Port 80
+    listen       80;
+    server_name  _;
+      location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+      }
+      error_page   500 502 503 504  /50x.html;
+      location = /50x.html {
+        root   /usr/share/nginx/html;
+      }
+    }
+    #########################
+    # Front End
+    #########################
+    server {
+    listen       80;
+    server_name  metutors.com;
+      error_page   500 502 503 504  /50x.html;
+      location = /50x.html {
+        root   /usr/share/nginx/html;
+      }
+      location / {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass http://{{ .Values.frontend.service_name }};
+      }
+    }
+    #########################
+    # Back End
+    #########################
+    server {
+    listen       80;
+    server_name  backend.metutors.com;
+      error_page   500 502 503 504  /50x.html;
+      location = /50x.html {
+        root   /usr/share/nginx/html;
+      }
+      location / {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass http://{{ .Values.backend.service_name }};
+      }
+    }
+{{ end }}
