@@ -61,7 +61,7 @@ frontend:
 backend:
   replicas: 1
   service_name: "backend-service"
-  uploads_storage: "100Gi"
+  uploads_storage: "20Gi"
   image:
     repository:  metutors/metutors
     tag: "dev-be-1.0.0"
