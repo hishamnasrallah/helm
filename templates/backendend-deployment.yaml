@@ -66,7 +66,12 @@ spec:
           successThreshold: 1
           failureThreshold: 3
       volumes:
+{{ if eq .Values.env "staging" }}
         - name: uploads-volume
+{{ end }}
+{{ if eq .Values.env "production" }}
+        - name: prod-uploads
+{{ end }}
           persistentVolumeClaim:
 {{ if eq .Values.env "staging" }}
             claimName: uploads-volume
