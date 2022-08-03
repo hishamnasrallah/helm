@@ -21,14 +21,24 @@ spec:
         image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
         command: ["sh","-c","chown -R www-data:www-data /var/www/html/public/uploads"]
         volumeMounts:
+{{ if eq .Values.env "staging" }}
           - name: uploads-volume
+{{ end }}
+{{ if eq .Values.env "production" }}
+          - name: prod-uploads
+{{ end }}
             mountPath: /var/www/html/public/uploads
       containers:
       - name: {{ .Values.backend.service_name }}
         image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
         imagePullPolicy: Always
         volumeMounts:
+{{ if eq .Values.env "staging" }}
           - name: uploads-volume
+{{ end }}
+{{ if eq .Values.env "production" }}
+          - name: prod-uploads
+{{ end }}
             mountPath: /var/www/html/public/uploads
         resources:
           limits:
@@ -58,6 +68,11 @@ spec:
       volumes:
         - name: uploads-volume
           persistentVolumeClaim:
+{{ if eq .Values.env "staging" }}
             claimName: uploads-volume
+{{ end }}
+{{ if eq .Values.env "production" }}
+            claimName: prod-uploads
+{{ end }}
       imagePullSecrets:
       - name: "utils-docker"
