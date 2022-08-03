@@ -211,3 +211,33 @@ data:
       }
     }
 {{ end }}
+---
+{{ if eq .Values.env "production" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-logger-conf
+  labels:
+    name: gateway-logger-conf
+data:
+  filebeat.yml: |-
+    filebeat.inputs:
+    - type: log
+      paths:
+      - /var/log/nginx/nginx.log
+      fields:
+        service-logged: {{ .Values.gateway.service_name }}
+        environment: {{ .Values.env }}
+      fields_under_root: true
+      encoding: utf-8
+    output.elasticsearch:
+      hosts: ["{{ .Values.logger.elasticsearch_host }}"]
+      {{ if .Values.logger.basic_auth }}
+      username: {{ .Values.logger.username }}
+      password: {{ .Values.logger.password }}
+      {{ end }}
+      index: "{{ .Values.gateway.service_name }}-%{+yyyy.MM.dd}"
+    setup.template.name: "{{ .Values.gateway.service_name }}"
+    setup.template.pattern: "{{ .Values.gateway.service_name }}-*"
+    setup.ilm.enabled: false
+{{ end }}
