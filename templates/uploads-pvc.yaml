@@ -1,14 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-
-{{ if eq .Values.env "staging" }}
   name: uploads-volume
-{{ end }}
-{{ if eq .Values.env "production" }}
-  name: prod-uploads
-{{ end }}
-
 spec:
   accessModes:
     - ReadWriteMany
