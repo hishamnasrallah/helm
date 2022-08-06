@@ -85,28 +85,28 @@ spec:
             - artisan
             - assignment:deadline
           restartPolicy: Never
-#---
-#apiVersion: batch/v1
-#kind: CronJob
-#metadata:
-#  name: class-cron
-#spec:
-#  schedule: "* * * * *"
-#  successfulJobsHistoryLimit: 0
-#  failedJobsHistoryLimit: 0
-#  jobTemplate:
-#    spec:
-#      template:
-#        spec:
-#          containers:
-#          - name: class-cron
-#            image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
-#            imagePullPolicy: IfNotPresent
-#            command:
-#            - /usr/bin/php 
-#            - artisan
-#            - class:cron
-#          restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: class-cron
+spec:
+  schedule: "* * * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: class-cron
+            image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+            imagePullPolicy: IfNotPresent
+            command:
+            - /usr/bin/php 
+            - artisan
+            - class:cron
+          restartPolicy: Never
 ---
 apiVersion: batch/v1
 kind: CronJob
