@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: queue-work
+  name: course-completed
 spec:
   schedule: "* * * * *"
   jobTemplate:
@@ -9,11 +9,10 @@ spec:
       template:
         spec:
           containers:
-          - name: queue-work
+          - name: course-completed
             image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
             imagePullPolicy: IfNotPresent
             command:
-            - /bin/sh
-            - php
+            - /usr/bin/php 
             - artisan course:completed
           restartPolicy: OnFailure
