@@ -4,6 +4,8 @@ metadata:
   name: course-completed
 spec:
   schedule: "* * * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
   jobTemplate:
     spec:
       template:
@@ -24,6 +26,8 @@ metadata:
   name: assignment-completed
 spec:
   schedule: "* * * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
   jobTemplate:
     spec:
       template:
@@ -44,6 +48,8 @@ metadata:
   name: course-reminder
 spec:
   schedule: "* * * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
   jobTemplate:
     spec:
       template:
@@ -64,6 +70,8 @@ metadata:
   name: assignment-deadline
 spec:
   schedule: "* * * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
   jobTemplate:
     spec:
       template:
@@ -84,6 +92,8 @@ spec:
 #  name: class-cron
 #spec:
 #  schedule: "* * * * *"
+#  successfulJobsHistoryLimit: 0
+#  failedJobsHistoryLimit: 0
 #  jobTemplate:
 #    spec:
 #      template:
@@ -104,6 +114,8 @@ metadata:
   name: queue-work
 spec:
   schedule: "* * * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
   jobTemplate:
     spec:
       template:
