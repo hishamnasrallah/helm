@@ -24,22 +24,6 @@ spec:
         image: shapsough/utils:busybox
         command: ["sh","-c","until nc -vz {{ .Values.backend.service_name }}:80; do echo 'Waiting for BackEnd'; sleep 2; done;"]
       containers:
-      - name: {{ .Values.gateway.service_name }}-logger
-        image: shapsough/utils:filebeat-7.14.2
-        imagePullPolicy: IfNotPresent
-        resources:
-          limits:
-            cpu: 0.25
-            memory: 128Mi
-          requests:
-            cpu: 0.25
-            memory: 128Mi
-        volumeMounts:
-            - name: gateway-logger-conf
-              mountPath: /filebeat/filebeat.yml
-              subPath: filebeat.yml
-            - name: logs-share
-              mountPath: /var/log/nginx
       - name: {{ .Values.gateway.service_name }}
         image: {{ .Values.gateway.image.repository }}:{{ .Values.gateway.image.tag }}
         imagePullPolicy: {{ .Values.gateway.image.pullPolicy }}
