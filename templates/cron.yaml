@@ -14,5 +14,6 @@ spec:
             imagePullPolicy: IfNotPresent
             command:
             - /usr/bin/php 
-            - artisan course:completed
+            - artisan
+            - course:completed
           restartPolicy: OnFailure
