@@ -116,5 +116,6 @@ spec:
             - /usr/bin/php 
             - artisan
             - queue:work
+            - --stop-when-empty
           restartPolicy: Never
 ---
