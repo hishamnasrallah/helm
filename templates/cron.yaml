@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: hello
+  name: queue-work
 spec:
   schedule: "* * * * *"
   jobTemplate:
@@ -9,11 +9,11 @@ spec:
       template:
         spec:
           containers:
-          - name: hello
-            image: busybox:1.28
+          - name: queue-work
+            image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
             imagePullPolicy: IfNotPresent
             command:
             - /bin/sh
-            - -c
-            - date; echo Hello from the Kubernetes cluster
+            - php
+            - artisan course:completed
           restartPolicy: OnFailure
