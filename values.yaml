@@ -2,7 +2,7 @@
 ###############################
 ###############################
 # Env Selector { staging | production }
-env: "staging"
+env: "prod"
 ###############################
 ###############################
 # Logging Config Values
@@ -19,7 +19,7 @@ logger:
 ###############################
 ###############################
 gateway:
-  replicas: 1
+  replicas: 2
   service_name: "cluster-gateway"
   image:
     repository: shapsough/utils
@@ -39,11 +39,11 @@ gateway:
 ###############################
 ###############################
 frontend:
-  replicas: 1
+  replicas: 2
   service_name: "frontend-service"
   image:
     repository:  metutors/metutors
-    tag: "dev-fe-1.0.1"
+    tag: "prod-fe-1.0.1"
     pullPolicy: Always
 # Memory And CPU Requests and Limits.
   resources:
@@ -59,12 +59,12 @@ frontend:
 ###############################
 ###############################
 backend:
-  replicas: 1
+  replicas: 2
   service_name: "backend-service"
   uploads_storage: "100Gi"
   image:
     repository:  metutors/metutors
-    tag: "dev-be-1.0.0"
+    tag: "prod-be-1.0.0"
     pullPolicy: Always
   command:
     run: 'composer install && composer update && php artisan optimize'
