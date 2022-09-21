@@ -180,7 +180,7 @@ data:
     #########################
     server {
     listen       80;
-    server_name  metutors.com;
+    server_name  metutors.com www.metutors.com;
       error_page   500 502 503 504  /50x.html;
       location = /50x.html {
         root   /usr/share/nginx/html;
